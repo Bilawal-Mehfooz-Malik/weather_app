@@ -8,7 +8,7 @@
 
 #include <geolocator_windows/geolocator_windows.h>
 
-void RegisterPlugins(flutter::PluginRegistry *registry) {
-    GeolocatorWindowsRegisterWithRegistrar(
-            registry->GetRegistrarForPlugin("GeolocatorWindows"));
+void RegisterPlugins(flutter::PluginRegistry* registry) {
+  GeolocatorWindowsRegisterWithRegistrar(
+      registry->GetRegistrarForPlugin("GeolocatorWindows"));
 }
