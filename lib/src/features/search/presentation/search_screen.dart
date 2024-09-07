@@ -1,10 +1,11 @@
-import 'package:flutter/material.dart';
 import 'package:gap/gap.dart';
-import 'package:flutter_typeahead/flutter_typeahead.dart';
+import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:weather_app/src/common/custom_dialog.dart';
+import 'package:flutter_typeahead/flutter_typeahead.dart';
+
 import 'package:weather_app/src/features/search/domain/city_model.dart';
 import 'package:weather_app/src/features/search/presentation/cities_search_controller.dart';
+import 'package:weather_app/src/localization/string_hardcoded.dart';
 
 class SearchScreen extends ConsumerWidget {
   const SearchScreen({super.key});
@@ -18,34 +19,20 @@ class SearchScreen extends ConsumerWidget {
     final searchResults = ref.watch(citySearchProvider);
 
     return AppBar(
+      leading: _backButton(context),
       title: Row(
         children: [
           Expanded(
             child: TypeAheadField<City>(
               suggestionsCallback: (query) async {
-                // Trigger the search
                 ref.read(citySearchProvider.notifier).searchCities(query);
                 return searchResults;
               },
-              builder: (context, controller, focusNode) {
-                return TextField(
-                  autofocus: true,
-                  focusNode: focusNode,
-                  controller: controller,
-                  decoration: const InputDecoration(
-                    border: OutlineInputBorder(),
-                    labelText: ' Search for a city',
-                  ),
-                );
+              builder: (_, controller, focusNode) {
+                return _buildTextField(focusNode, controller);
               },
-              itemBuilder: (context, City suggestion) {
-                // Display the city name in the suggestion list
-                return ListTile(title: Text(suggestion.cityName));
-              },
-              onSelected: (City suggestion) {
-                // TODO: Implement logic when city selected
-                showCustomSnack(context, 'Selected: ${suggestion.cityName}');
-              },
+              onSelected: (city) => _handlePop(context, city),
+              itemBuilder: (_, city) => ListTile(title: Text(city.cityName)),
             ),
           ),
           const Gap(8),
@@ -53,5 +40,38 @@ class SearchScreen extends ConsumerWidget {
       ),
       titleSpacing: 0,
     );
+  }
+
+  BackButton _backButton(BuildContext context) {
+    return BackButton(onPressed: () => _handlePop(context));
+  }
+
+  TextField _buildTextField(
+    FocusNode focusNode,
+    TextEditingController controller,
+  ) {
+    return TextField(
+      autofocus: true,
+      focusNode: focusNode,
+      controller: controller,
+      decoration: InputDecoration(
+        border: const OutlineInputBorder(),
+        hintText: ' Search for a city'.hardcoded,
+      ),
+    );
+  }
+
+  // Handle navigation pop with optional city data
+  void _handlePop(BuildContext context, [City? city]) async {
+    FocusScope.of(context).unfocus();
+    await Future.delayed(const Duration(milliseconds: 300));
+
+    if (context.mounted) {
+      if (city != null) {
+        Navigator.of(context).pop(city); // Pop with city if provided
+      } else {
+        Navigator.of(context).pop(); // Pop without city (back button case)
+      }
+    }
   }
 }

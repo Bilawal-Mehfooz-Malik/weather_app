@@ -1,3 +1,4 @@
+import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:weather_app/src/features/startup/services/location_service.dart';
 
@@ -19,10 +20,11 @@ class LocationNotifier extends StateNotifier<LocationState> {
   LocationNotifier(this._locationService)
       : super(LocationState(isLoading: false));
 
-  Future<void> getLocation() async {
+  // Pass BuildContext directly when calling this method from UI
+  Future<void> getLocation(BuildContext context) async {
     state = LocationState(isLoading: true);
     try {
-      final city = await _locationService.getCityFromLocation();
+      final city = await _locationService.getCityFromLocation(context);
       state = LocationState(isLoading: false, city: city);
     } catch (e) {
       state = LocationState(isLoading: false, error: e.toString());

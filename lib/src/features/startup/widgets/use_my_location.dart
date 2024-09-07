@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+
 import 'package:weather_app/src/common/custom_dialog.dart';
 import 'package:weather_app/src/localization/string_hardcoded.dart';
-
 import 'package:weather_app/src/features/startup/services/location_controller.dart';
 
 class UseMyLocation extends ConsumerWidget {
@@ -19,7 +19,7 @@ class UseMyLocation extends ConsumerWidget {
         controller.text = data.city!;
       }
       if (data.error != null) {
-        showCustomSnack(context, 'Error: ${data.error}');
+        showCustomSnack(context, 'Error: ${data.error}'.hardcoded);
       }
     });
 
@@ -28,7 +28,7 @@ class UseMyLocation extends ConsumerWidget {
       child: ElevatedButton(
         onPressed: locationState.isLoading
             ? null
-            : () => ref.read(locationProvider.notifier).getLocation(),
+            : () => ref.read(locationProvider.notifier).getLocation(context),
         child: locationState.isLoading
             ? const CircularProgressIndicator(color: Colors.white)
             : Text('Use my location'.hardcoded),

@@ -8,7 +8,7 @@ class CitiesDatabase {
   Database? _db;
 
   // Method to open the database from the assets folder
-  Future<Database> _openDb() async {
+  Future<Database> openDb() async {
     if (_db != null) {
       return _db!; // Return cached database
     }
@@ -32,7 +32,7 @@ class CitiesDatabase {
 
   // Method to search cities by name and return a list of City objects
   Future<List<City>> searchCities(String query) async {
-    final db = await _openDb();
+    final db = await openDb();
 
     // Sort results: cities starting with the query should come first
     List<Map<String, dynamic>> results = await db.query(

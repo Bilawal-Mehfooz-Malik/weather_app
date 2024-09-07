@@ -7,6 +7,10 @@ class CitySearchNotifier extends StateNotifier<List<City>> {
 
   CitySearchNotifier(this._citiesDatabase) : super([]);
 
+  Future<void> openDatabase() async {
+    _citiesDatabase.openDb();
+  }
+
   Future<void> searchCities(String query) async {
     if (query.isNotEmpty) {
       // Fetch results from the CitiesDatabase
@@ -18,7 +22,6 @@ class CitySearchNotifier extends StateNotifier<List<City>> {
   }
 }
 
-// Provider to access the CitySearchNotifier
 final citySearchProvider =
     StateNotifierProvider<CitySearchNotifier, List<City>>((ref) {
   return CitySearchNotifier(CitiesDatabase());

@@ -1,6 +1,7 @@
 import 'package:gap/gap.dart';
 import 'package:flutter/material.dart';
 
+import 'package:weather_app/src/localization/string_hardcoded.dart';
 import 'package:weather_app/src/features/startup/widgets/search_field.dart';
 import 'package:weather_app/src/features/startup/widgets/use_my_location.dart';
 
@@ -55,7 +56,7 @@ class _StartupScreenState extends State<StartupScreen> {
         children: [
           // [Title Text]
           Text(
-            'Welcome to the weather app',
+            'Welcome to the weather app'.hardcoded,
             style: style.textTheme.titleMedium,
           ),
           const Gap(16),
